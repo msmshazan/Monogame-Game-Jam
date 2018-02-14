@@ -7,18 +7,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Game_Jam
 {
-    // Token: 0x02000003 RID: 3
     internal class GameData
     {
-        // Token: 0x06000008 RID: 8 RVA: 0x00002246 File Offset: 0x00000446
         public GameData(float z, Vector2 playerStartPos, Rect Bounds)
         {
             this.player = default(Player);
             this.player.Init(z, playerStartPos);
             this.bounds = Bounds;
         }
-
-        // Token: 0x06000009 RID: 9 RVA: 0x00002278 File Offset: 0x00000478
+        
         public void Update(float deltatime)
         {
             this.dt = deltatime;
@@ -37,35 +34,24 @@ namespace Game_Jam
                 this.player.Pos.X = PlayerPrevPos.X;
             }
         }
-
-        // Token: 0x0400000C RID: 12
+        
         public Player player;
-
-        // Token: 0x0400000D RID: 13
+        
         private float dt;
-
-        // Token: 0x0400000E RID: 14
+        
         public int CurrentRoom = 0;
-
-        // Token: 0x0400000F RID: 15
+        
         public Rect bounds;
     }
-    // Token: 0x02000004 RID: 4
     public enum TextureID
     {
-        // Token: 0x04000011 RID: 17
         font,
-        // Token: 0x04000012 RID: 18
         pixel,
-        // Token: 0x04000013 RID: 19
         background,
-        // Token: 0x04000014 RID: 20
         player_left,
-        // Token: 0x04000015 RID: 21
         player_right,
-        // Token: 0x04000016 RID: 22
         MAX_TEXTURES
-    }// Token: 0x02000005 RID: 5
+    }
     public struct Player
     {
         public void Init(float z, Vector2 pos)
@@ -158,13 +144,11 @@ namespace Game_Jam
     }
     public class Game1 : Game
     {
-        // Token: 0x0600000A RID: 10 RVA: 0x0000234F File Offset: 0x0000054F
         private void LoadTexture(string str)
         {
             this.Textures_2D.Add(base.Content.Load<Texture2D>(str));
         }
 
-        // Token: 0x0600000B RID: 11 RVA: 0x0000236C File Offset: 0x0000056C
         private Texture2D GetPixelTexture(Color col)
         {
             Texture2D tex = new Texture2D(base.GraphicsDevice, 1, 1);
@@ -175,7 +159,6 @@ namespace Game_Jam
             return tex;
         }
 
-        // Token: 0x0600000C RID: 12 RVA: 0x000023A4 File Offset: 0x000005A4
         public Game1()
         {
             base.IsMouseVisible = true;
@@ -190,13 +173,11 @@ namespace Game_Jam
             this.graphics.ApplyChanges();
         }
 
-        // Token: 0x0600000D RID: 13 RVA: 0x0000243B File Offset: 0x0000063B
         protected override void Initialize()
         {
             base.Initialize();
         }
 
-        // Token: 0x0600000E RID: 14 RVA: 0x00002448 File Offset: 0x00000648
         private void InitializeTextures()
         {
             this.Textures_2D = new List<Texture2D>();
@@ -224,7 +205,6 @@ namespace Game_Jam
             }
         }
 
-        // Token: 0x0600000F RID: 15 RVA: 0x000024EC File Offset: 0x000006EC
         protected override void LoadContent()
         {
             this.RealScreenDim = new Vector2((float)base.GraphicsDevice.Viewport.Width, (float)base.GraphicsDevice.Viewport.Height);
@@ -235,12 +215,10 @@ namespace Game_Jam
             this.InitializeTextures();
         }
 
-        // Token: 0x06000010 RID: 16 RVA: 0x000020FE File Offset: 0x000002FE
         protected override void UnloadContent()
         {
         }
 
-        // Token: 0x06000011 RID: 17 RVA: 0x00002580 File Offset: 0x00000780
         protected override void Update(GameTime gameTime)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -410,7 +388,6 @@ namespace Game_Jam
             base.Update(gameTime);
         }
 
-        // Token: 0x06000012 RID: 18 RVA: 0x00002FE4 File Offset: 0x000011E4
         protected override void Draw(GameTime gameTime)
         {
             base.GraphicsDevice.Clear(Color.Brown);
@@ -506,81 +483,56 @@ namespace Game_Jam
             base.Draw(gameTime);
         }
 
-        // Token: 0x04000017 RID: 23
         private GraphicsDeviceManager graphics;
 
-        // Token: 0x04000018 RID: 24
         private SpriteBatch spriteBatch;
 
-        // Token: 0x04000019 RID: 25
         private Vector2 RealScreenDim;
 
-        // Token: 0x0400001A RID: 26
         private Vector2 ScreenDim;
 
-        // Token: 0x0400001B RID: 27
         private Texture2D pixel;
 
-        // Token: 0x0400001C RID: 28
         private SpriteFont font;
 
-        // Token: 0x0400001D RID: 29
         private List<DrawCommand> DrawList;
 
-        // Token: 0x0400001E RID: 30
         private List<Texture2D> Textures_2D;
 
-        // Token: 0x0400001F RID: 31
         private MouseState MouseState;
 
-        // Token: 0x04000020 RID: 32
         private KeyboardState KeyboardState;
 
-        // Token: 0x04000021 RID: 33
         private MouseState PrevMouseState;
 
-        // Token: 0x04000022 RID: 34
         private KeyboardState PrevKeyboardState;
 
-        // Token: 0x04000023 RID: 35
         private List<Game1.Label> Labels = new List<Game1.Label>();
 
-        // Token: 0x04000024 RID: 36
         private bool GameInit = false;
 
-        // Token: 0x04000025 RID: 37
         private GameData gameData;
 
-        // Token: 0x04000026 RID: 38
         private float timer;
 
-        // Token: 0x04000027 RID: 39
         private bool starttextanim = true;
 
-        // Token: 0x04000028 RID: 40
         private Vector2 movetopoint = Vector2.Zero;
 
-        // Token: 0x04000029 RID: 41
         private bool setmovepoint;
 
-        // Token: 0x0200000C RID: 12
         public struct Label
         {
-            // Token: 0x06000033 RID: 51 RVA: 0x00003E48 File Offset: 0x00002048
             public Label(string strs, Game1.Label.OnMouseClick del = null)
             {
                 this.str = strs;
                 this.OnClick = del;
             }
 
-            // Token: 0x0400003C RID: 60
             public string str;
 
-            // Token: 0x0400003D RID: 61
             public Game1.Label.OnMouseClick OnClick;
 
-            // Token: 0x0200000F RID: 15
-            // (Invoke) Token: 0x0600003E RID: 62
             public delegate void OnMouseClick();
         }
     }
