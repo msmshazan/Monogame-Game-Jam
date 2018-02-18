@@ -31,7 +31,7 @@ namespace Game_Jam
          public Player player;
         
         private float dt;
-        
+        public int Score = 0;
         public int CurrentRoom = 0;
 
         public List<RoomData> Rooms;
@@ -40,9 +40,11 @@ namespace Game_Jam
 
         const int MaxSpeedCharge = 10;
         int SpeedCharge;
+        public Vector4 ParticleColour;
         public GameData(float z, Vector2 playerStartPos, Rect Bounds)
         {
             player = default(Player);
+            ParticleColour = new Vector4(1f, 0.6f, 0.3f, 0.9f);
             player.Init(z, playerStartPos);
             bounds = Bounds;
             Rooms = new List<RoomData>();
@@ -64,7 +66,7 @@ namespace Game_Jam
                 player.Pos.X = PlayerPrevPos.X;
             }
             
-            if (CurrentRoom % 5 == 0)
+            if (CurrentRoom % 5 == 0 && Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 if (player.Inventory.Where(x => x.item == ItemID.Battery).Count() >= 5) {
                     for (int i = 0; i < 5; i++)
@@ -75,6 +77,9 @@ namespace Game_Jam
                     {
                         player.acc *= 1.1f;
                         SpeedCharge++;
+                        ParticleColour.W -= 0.05f;
+                        ParticleColour.X -= 0.05f;
+                        ParticleColour.Y += 0.05f;
                     }
                 }
             }
@@ -279,7 +284,6 @@ namespace Game_Jam
         private bool setmovepoint;
         int particlecount = 0;
         particle[] particles = new particle[200];
-        SoundEffectInstance instance;
         float updatetimer;
         bool menuvisible;
         GameState State = GameState.Menu;
@@ -415,19 +419,20 @@ namespace Game_Jam
                 gameData.player.Dim = Textures_2D[(int) gameData.player.tex_id].Bounds.Size.ToVector2() * 3f;
                 gameData.player.acc = 50;
                 GameInit = true;
-                Labels.Add(new Label("Hello"));
-                Labels.Add(new Label(" "));
-                Labels.Add(new Label("World"));
-                Labels.Add(new Label("NL"));
-                Labels.Add(new Label("Embarking on an adventure!!!!"));
-                Labels.Add(new Label("NL"));
                 string NewLine = "/NL";
-                string Block = "I am a robot... NL   Called... NL      Hope    " + NewLine + 
-                    " " + NewLine +
-                    " " + NewLine;
-                for (int i = 0; i < 1000; i++)
+                string Block = "I am draining... NL Help me collect some batteries NL  And Help me change to my fullest form     " + NewLine + 
+                    " And try to get a good score ;) " + NewLine +
+                    " Okay now ... NL GO!!!!!! " + NewLine;
+                for (int i = 3; i < 1000; i++)
                 {
-                    Block = Block + "" + NewLine;
+                    if (i % 5 == 0)
+                    {
+                        Block = Block + "Press space to transform" + NewLine;
+                    }
+                    else
+                    {
+                        Block = Block + "Collect the batteries" + NewLine;
+                    }
                 }
                 string[] Strings = Block.Split(new string[] { "/NL" }, StringSplitOptions.None);
                 for (int i = 0; i < Strings.Length; i++)
@@ -446,7 +451,8 @@ namespace Game_Jam
                         Labels.Add(new Label("NL"));
                     }));
                 }
-                //MediaPlayer.Play(BackgroundMusic);
+                MediaPlayer.Play(BackgroundMusic);
+
             }
             
             switch (State)
@@ -595,7 +601,7 @@ namespace Game_Jam
                             {
                                 particles[i] = new particle();
                                 particles[i].P = offset;
-                                particles[i].Col = new Vector4(1f, 0.6f, 0.3f, 0.9f);
+                                particles[i].Col = gameData.ParticleColour;
                                 particles[i].dP = new Vector2(random.Next(-300, 300),random.Next(100, 600));
                                 particles[i].dCol = new Vector4(0.1f, 0.1f, 0, -0.7f);
                             }
@@ -693,6 +699,7 @@ namespace Game_Jam
                         startpos = topview.TopLeft + startpad + new Vector2(0f, -fontdim.Y * fontscale.Y);
                         textpos = startpos;
                         int movedistance = 400;
+                        /*
                         TempLabels.Add(new Label("JUMP", delegate
                         {
                             gameData.player.Jump(1000);
@@ -715,6 +722,7 @@ namespace Game_Jam
                         TempLabels.Add(new Label("NL"));
                         DebugTempLabels.Add(new Label("Movetopos:" + movetopoint));
                         DebugTempLabels.Add(new Label("NL"));
+                        */
                         float width = (gameData.bounds.Dim.X / (gameData.Rooms[gameData.CurrentRoom].items.Count+1));
                         for (int t = 0; t < gameData.Rooms[gameData.CurrentRoom].items.Count; t++)
                             {
@@ -766,6 +774,9 @@ namespace Game_Jam
                             {
                                 gameData.player.Inventory.Add(gameData.Rooms[gameData.CurrentRoom].items[t]);
                                 gameData.Rooms[gameData.CurrentRoom].items.RemoveAt(t);
+                                gameData.Score += 200;
+                                Labels.Add(new Label(" + 200 !!!"));
+                                Labels.Add(new Label("NL"));
                             }
                         }
                         TempLabels.Add(new Label("Inventory :{"));
@@ -774,14 +785,12 @@ namespace Game_Jam
                         {
                             int p = i;
                             if (i != 0) TempLabels.Add(new Label(","));
-                            TempLabels.Add(new Label(gameData.player.Inventory[i].item ==  ItemID.Battery ? "|\u2588 \u2588 \u2588 \u2588|" : gameData.player.Inventory[i].item.ToString(), delegate {
-
-                                gameData.player.Inventory[p].Use?.Invoke();
-                                gameData.player.Inventory.Remove( gameData.player.Inventory[p]);
-                            }));
+                            TempLabels.Add(new Label(gameData.player.Inventory[i].item ==  ItemID.Battery ? "|\u2588 \u2588 \u2588 \u2588|" : gameData.player.Inventory[i].item.ToString()));
                             if (i % 4 == 0) TempLabels.Add(new Label("NL"));
                         }
                         TempLabels.Add(new Label("}"));
+                        TempLabels.Add(new Label("NL"));
+                        TempLabels.Add(new Label("Score: "+gameData.Score ));
                         TempLabels.Add(new Label("NL"));
                         for (int i = 0; i < Labels.Count; i++)
                         {
