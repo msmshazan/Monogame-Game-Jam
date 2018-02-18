@@ -1,0 +1,9 @@
+﻿		Gameplay Plan
+		============
+Robot who is lost in the moon and must transform himself to a rocket robot to escape to earth.
+
+He must find a battery before he dies.
+
+Top screen contains inventory and detains about robot and environment.
+
+Items should be selected by clicking and by showing a popup when done.

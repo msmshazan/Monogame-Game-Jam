@@ -55,6 +55,15 @@ namespace Game_Jam
         {
             return (rect.min.X >= min.X) && (rect.min.Y >= min.Y) && (rect.max.X <= max.X) && (rect.max.Y <= max.Y);
         }
+
+        public bool Intersect(Rect rect)
+        {
+            // Exit with no intersection if separated along an axis
+            if (rect.max.X < min.X || rect.min.X > max.X) return false;
+            if (rect.max.Y < min.Y || rect.min.Y > max.Y) return false;
+            // Overlapping on all axes means AABBs are intersecting
+            return true;
+        }
         public Rectangle ToRectangle()
         {
             var dim = max - min;
